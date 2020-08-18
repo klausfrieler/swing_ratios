@@ -170,7 +170,7 @@ interpolate_sr <- function(data, sigma = .025, precision = .1, max_sr = 3, n = 5
     rename(measured_sr = sr)
 }
 
-read_swing_ratios_raw <- function(fname = "c:/MeloSpyGUI/analysis/feature+viz/swing_ratios_raw.csv"){
+read_swing_ratios_raw <- function(fname = "data/swing_ratios_raw.csv"){
   srw <- read.csv(fname, header = T, stringsAsFactors = F, sep = ";") %>% as_tibble()
   srw <- srw %>% mutate(melid = as.integer(factor(id)))
   srw <- srw %>% mutate(beat_id = sprintf("%s_%s_%s", melid, bar, beat))
@@ -774,4 +774,28 @@ boots_trap_gmm <- function(data, group_var = "id", size = 10000, iteration = 10,
       fgmm
     })  
   })
+}
+
+get_triple_stats <- function(data = srw_f){
+  mean_swung_triples <- data %>% 
+    count(id, sr_type) %>% 
+    group_by(sr_type) %>% 
+    summarise(m = mean(n), s = sd(n))
+  id_stats <- data %>% 
+    group_by(sr_type) %>% 
+    summarise(n= n_distinct(id), freq = n/456)
+  type_stats <- data %>% 
+    mutate(total = nrow(.)) %>% 
+    count(sr_type, total) %>% 
+    mutate(freq = n/total )
+  type_stats %>% 
+    left_join(mean_swung_triples, by = "sr_type") %>% 
+    left_join(id_stats, by = "sr_type") %>% 
+    select(-total, 
+           n_triples = n.x, 
+           f_triples = freq.x, 
+           mean_triples = m, 
+           sd_triples = s, 
+           n_solos = n.y, 
+           f_solos =freq.y)
 }
