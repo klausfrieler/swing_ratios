@@ -1,4 +1,4 @@
-# Swing Ratio Analysis
+# Swing Ratio Analysis of Monophonic Jazz Solos
 
 Contains data and analysis code for a study on swing ratios in jazz solo improvisation.
 
