@@ -9,6 +9,8 @@ Raw data is in `data/swing_ratios_raw.csv`. Cleaned, filtered, and annotated dat
 
 ## Citation
 
+## Authors
+Analysis script by Klaus Frieler, paper by Chris Corcoran and Klaus Frieler.
 
 ## Acknowledgments
 
